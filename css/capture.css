@@ -13,3 +13,8 @@
     height: 300px;
     width: 900px;
 }
+#SubmitImageButton{
+    width: 750px;
+    margin: 0 auto;
+    margin-top: 15px;
+}
