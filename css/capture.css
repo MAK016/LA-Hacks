@@ -1,0 +1,15 @@
+
+#mainImageUploadButton{
+    position:relative;
+    overflow:hidden;
+    width: 750px;
+    margin: 0 auto;
+    margin-top: 15px;
+}
+#mainImageUpload{
+    opacity:0;
+    position:absolute;
+    top:0; left: 0;
+    height: 300px;
+    width: 900px;
+}

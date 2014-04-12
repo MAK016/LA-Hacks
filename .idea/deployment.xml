@@ -9,6 +9,13 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="michaelshi.me">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/public_html/Projects/LAHacks" local="$PROJECT_DIR$" web="/Projects/LAHacks" />
+          </mappings>
+        </serverdata>
+      </paths>
     </serverData>
     <option name="myAutoUpload" value="ON_EXPLICIT_SAVE" />
   </component>
