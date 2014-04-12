@@ -6,17 +6,18 @@
  * Time: 6:53 AM
  */
 
+require 'db.php';
+
 session_start();
 
 //TODO: Actually check if everything is set
 if(!isset($_SESSION['UserID']) || !isset($_POST['locationLong'])){
-    die('Invalid session or location!');
+    dieJSON(-1, 'Incomplete form.');
+}
+if($_POST['locationLong'] == 0 || $_POST['locationLat'] == 0 ){
+    dieJSON(-1, 'Location is not locked on.');
 }
 
-$Connection = 'localhost';
-$Database = 'mikeshi_LAHacks';
-$Username = 'mikeshi_root';
-$Password = 'q1234!@#$';
 
 $Directory = $_SERVER['DOCUMENT_ROOT'].'/Projects/LAHacks/images/';
 
@@ -28,8 +29,11 @@ UploadNewImage($_SESSION['UserID'], $UploadedImage, $_POST['locationLong'], $_PO
 //Save to image directory and then return the file name.
 function SaveImageToDrive(){
     global $Directory;
+
     $target_Path = $Directory;
-    $target_Path = tempnam($target_Path,'')."jpg";
+    $temp_nam = tempnam($target_Path,'');
+    unlink($temp_nam);
+    $target_Path = $temp_nam.".jpg";
     move_uploaded_file($_FILES['mainImageUpload']['tmp_name'], $target_Path );
 
     $src_img = imagecreatefromjpeg($target_Path);
@@ -78,22 +82,5 @@ function UploadNewImage($User_idUser, $ImagePath, $Longitude, $Latitude, $Accura
     {
         print "Error on ".__FUNCTION__."!: " . $e->getMessage() . "<br/>";
         return -1;
-    }
-}
-
-function connect()
-{
-    try
-    {
-        global $Connection, $Database, $Username, $Password;
-        $db = new PDO("mysql:host={$Connection};dbname={$Database}", $Username, $Password);
-        $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $db;
-    } catch(PDOException $e)
-    {
-        print "Error on ".__FUNCTION__."!: " . $e->getMessage() . "<br/>";
-        $db = null;
-        die();
     }
 }

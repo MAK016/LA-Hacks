@@ -12,7 +12,7 @@ $(function(){
 
             //alert(position.coords.latitude+ position.coords.longitude);
 
-        });
+        }, function(){},{maximumAge: 30000, enableHighAccuracy:true});
     }
 
 });

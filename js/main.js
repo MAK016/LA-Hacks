@@ -17,4 +17,21 @@ $(function(){
             focal: e
         });
     });
+
+    getImageJSON();
+
+    function getImageJSON(){
+        navigator.geolocation.getCurrentPosition(function(position) {
+
+            $.post("/Projects/LAHacks/magic/getImage.php",
+                { locationLong: position.coords.longitude, locationLat: position.coords.latitude },
+                function(data){
+                    console.log('bloop');
+                    alert(data);
+                }
+            );
+
+        }, function(){},{maximumAge: 30000, enableHighAccuracy:true});
+
+    }
 });
