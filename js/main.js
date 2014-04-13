@@ -31,84 +31,72 @@ $(function(){
                 { locationLong: -118.4352035, locationLat: 34.0661969 }, //TODO: Remove this debug line
                 function(data){
                     var retVal = jQuery.parseJSON(data);
-                    setImages(retVal['Images'], retVal['OriginLongitude'], retVal['OriginLatitude'] );
+                    setImages(retVal);
                 }
             );
 
         //}, function(){},{maximumAge: 30000, enableHighAccuracy:true});
     }
 
-    function setImages(images, curLong, curLat){
+    function setImages(data){
+        var SplitCount = 3;
 
-        var imgPos = [];
+        var longDiff = Math.abs(data['MaxLong']-data['MinLong'])/SplitCount;
+        var latDiff = Math.abs(data['MaxLat']-data['MinLat'])/SplitCount;
 
-        var WorldX = 0, WorldY = 0, WorldWidth = 0, WorldHeight = 0;
+        console.log(longDiff);
+        console.log(latDiff);
 
-        for(var i=0; i<images.length; i++){
+        for(var y=0; y<SplitCount; y++){
 
-            var imgTop = (images[i]['Latitude']-curLat)*350000,
-                imgLeft = (images[i]['Longitude']-curLong)*350000,//-curLong+getRandomArbitrary(-.01,.01))
-                imgWidth = images[i]['Width'],
-                imgHeight = images[i]['Height'];
+            var minLatSegment = parseFloat(data['MinLat'])+y*latDiff;
+            var maxLatSegment = parseFloat(data['MinLat'])+(y+1)*latDiff;
 
-            console.log('WorldX: ' + WorldX);
-            console.log('WorldY: ' + WorldY);
-            console.log('WorldWidth: ' + WorldWidth);
-            console.log('WorldHeight: ' + WorldHeight);
+            for(var x=0; x<SplitCount; x++){
 
-            //We don't need collision checks for the first item
-            if(i!=0){
-                for(var j=0; j<imgPos.length; j++){
-                    if(rectIntersect(imgLeft,imgWidth,imgPos[j]['x'],imgPos[j]['w'],imgTop,imgHeight,imgPos[j]['y'],imgPos[j]['h'])){
+                console.log(x);
 
-                        var MovementAngle = Math.atan2((WorldY+WorldHeight/2) - (imgTop+imgHeight/2) ,(WorldX+WorldWidth/2)-(imgLeft+imgWidth/2));
+                var minLongSegment = parseFloat(data['MinLong'])+x*longDiff;
+                var maxLongSegment = parseFloat(data['MinLong'])+(x+1)*longDiff;
 
-                        $('#WorldNav').append( "<div style='color:white;z-index:500;position:absolute;top:"+imgTop+"px;left:"+imgLeft+"px;'>"+MovementAngle+"</div>" );
+                var masonryGridDiv = $('<div/>').addClass('masonryGrid').attr('id',x+'-'+y).css('height','1000px');
 
-                        while(rectIntersect(imgLeft,imgWidth,imgPos[j]['x'],imgPos[j]['w'],imgTop,imgHeight,imgPos[j]['y'],imgPos[j]['h'])){
-                            imgTop += Math.sin(MovementAngle)*100;
-                            imgLeft += Math.cos(MovementAngle)*100;
-                        }
-                        j=0+0;
+                if(x!=0){
+                    masonryGridDiv.css('display','inline');
+                }
+
+                for(var i=0; i<data['Images'].length; i++){
+
+                    var image = data['Images'][i];
+
+                    console.log(maxLatSegment - minLatSegment);
+
+                    if(image['Latitude']>=minLatSegment && image['Latitude']<maxLatSegment
+                        && image['Longitude']>=minLongSegment && image['Longitude']<maxLongSegment
+                        && data['Images'][i]['Used'] != true){
+
+                        data['Images'][i]['Used'] = true;
+
+                        $('<img />')
+                            .attr('src', 'data:image/jpeg;base64,'+ data['Images'][i]['Base64Image'])
+                            .addClass('WorldImage')
+                            .data('id','#'+x+'-'+y)
+                            .css({
+                                'width': data['Images'][i]['Width'],
+                                'height': data['Images'][i]['Height']
+                            })
+                            .load(function(){
+                                $($(this).data('id')).append( $(this) ).masonry({
+                                    // other masonry options
+                                    itemSelector: '.WorldImage'
+                                }).masonry('reloadItems');
+                            });
+
                     }
                 }
-            }
 
-            //Set coordinates for the world, to determine geometric center of the world.
-            if(imgLeft<WorldX){
-                WorldX = imgLeft;
+                $('#WorldNav').append(masonryGridDiv);
             }
-            if(imgTop<WorldY){
-                WorldY = imgTop;
-            }
-            if(imgTop+imgHeight>WorldY+WorldHeight){
-                WorldHeight = (imgTop+imgHeight) - WorldY;
-            }
-            if(imgLeft+imgWidth > WorldX+WorldWidth){
-                WorldWidth = (imgLeft+imgWidth) - WorldX;
-            }
-
-            var curImgPos = [];
-            curImgPos['x'] = imgLeft;
-            curImgPos['y'] = imgTop;
-            curImgPos['w'] = imgWidth;
-            curImgPos['h'] = imgHeight;
-
-            imgPos.push(curImgPos);
-
-            $('<img />')
-                .attr('src', 'data:image/jpeg;base64,'+images[i]['Base64Image'])
-                .addClass('WorldImage')
-                .css({
-                    'top': imgTop,
-                    'left': imgLeft,
-                    'width': imgWidth,
-                    'height': imgHeight
-                })
-                .load(function(){
-                    $('#WorldNav').append( $(this) );
-                });
-
         }
     }
 
