@@ -69,7 +69,7 @@ $(function(){
                             imgTop += Math.sin(MovementAngle)*100;
                             imgLeft += Math.cos(MovementAngle)*100;
                         }
-                        j=0;
+                        j=0+0;
                     }
                 }
             }
