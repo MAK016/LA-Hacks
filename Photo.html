@@ -9,7 +9,7 @@
     </p>
     
     <p>
-    <button type="button1" onclick="doubleSize()">Update Size</button>
+    <button type="button1" onclick="updateSize()">Update Size</button>
     </p>
     
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -25,18 +25,17 @@
 	var ratio; //conversion from priority to size
 	var SCREENSIZE; //phone screen size
 	var pic = new Image;
-	/*double screenRepresentationalSize; //how big the screen represents geographically*/
+	var screenRepresentationalSize; //how big the screen represents geographically*/
 	var MINTHRESH = 10; //minimum size a photo can be
 	var MAXTHRESH = 300; //maximum size a photo can be
 	
 	function Photo (aLongitude, aLatitude)
 	{
-        alert("hi");
         longitude = aLongitude;
 		latitude = aLatitude;
 		timeOfBirth.getTime();
-		priorityPoints = 0.0;
-		updatePriority();
+		priorityPoints = 500.0;
+		updatePriority(false);
 		pic.src = "/Users/ericcheng/Pictures/Yosemite-Tahoe/Yosemite Bryan/2013-06-17 20.21.12 HDR.jpg";/*
         $('<img />').load(function(){
                           $("body").append($(this))
@@ -45,6 +44,7 @@
         document.getElementById("plss").innerHTML='<img id="photo" src="/Users/ericcheng/Pictures/Yosemite-Tahoe/Yosemite Bryan/2013-06-17 20.21.12 HDR.jpg"/>';
         SCREENSIZE = Math.sqrt(Math.pow(screen.availHeight,2) + Math.pow(screen.availWidth,2));
 		size = pic.width > pic.length ? pic.width:pic.length;
+        screenRepresentationalSize = 10;
        var myImage = document.getElementById('yosemite');
        if(myImage && myImage.style){
            myImage.style.width='400px';
@@ -57,9 +57,12 @@
 		age = currentTime.getTime() - timeOfBirth;
 	}
 	
-	function updatePriority()
+	function updatePriority(fromHover)
 	{
-		priorityPoints += (pic.width*pic.length)/(screen.availHeight*screen.availWidth);
+		if (fromHover)
+            priorityPoints += .25;
+        else
+            priorityPoints += 1;
 		updateAge();
 		priority = (1 - age/86400000)*priorityPoints;
 	}
@@ -69,31 +72,40 @@
 		ratio = SCREENSIZE/screenRepresentationalSize;
 	}
 	
-	function updateSize()
+	function updateRatioMultiplier() //multiply this return with ratio for size
 	{
-		var maybeSize;
+        updateRatio()
+        var maybeSize;
 		maybeSize = priority*ratio;
 		if (maybeSize > MINTHRESH && maybeSize <= MAXTHRESH)
 		{
-			size = maybeSize;
+			//alert("within");
+            return priority;
 		}
 		else if (maybeSize > MAXTHRESH)
 		{
-			size = MAXTHRESH;
+            //alert ("above");
+			return MAXTHRESH;
 		}
 		else
 		{
-			size = 0;
+            //alert ("below");
+			return 0;
 		}
-		updatePriority();
+		updatePriority(false);
 	}
 
-    function doubleSize()
+    function updateSize()
     {
-        document.getElementById("photo").style.width='50px';
-        //pic.width *=2;
-        //pic.setWidth(pic.width()*2);
-        //pic.setHeight(pic.height()*2);
+        var x = updateRatioMultiplier();
+        var xString = x.toString();
+        var px = "px";
+        var quote = "\'";
+        var xstring1=quote.concat(xString);
+        var xpixelage = xstring1.concat(px);
+        var finalx=xpixelage.concat(quote);
+        document.getElementById("photo").style.width = finalx;
+        document.getElementById("photo").style.height = '200px';
     }
 </script>
 </html>
