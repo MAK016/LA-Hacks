@@ -27,9 +27,6 @@
 
         <div id="WorldNavContainer">
             <div id="WorldNav">
-                <img class="WorldImage" style="top: 0px; left: 0px; background:red; width: 300px; height: 250px;" src="">
-                <img class="WorldImage" style="top: 520px; left: 35px; background:blue; width: 300px; height: 250px;" src="">
-                <img class="WorldImage" style="top: 105px; left: 250px; background:green; width: 120px; height: 230px;" src="">
             </div>
         </div>
 
