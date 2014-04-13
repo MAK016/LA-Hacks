@@ -18,8 +18,8 @@ if($_POST['locationLong'] == 0 || $_POST['locationLat'] == 0 ){
     dieJSON(-1, 'Location is not locked on.');
 }
 
-
 $Directory = $_SERVER['DOCUMENT_ROOT'].'/Projects/LAHacks/images/';
+//$Directory = $_SERVER['DOCUMENT_ROOT'].'/images/';
 
 $db = connect();
 $UploadedImage = SaveImageToDrive();

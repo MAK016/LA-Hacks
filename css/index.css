@@ -15,7 +15,8 @@ body{
 }
 /* This will contain the world image objects*/
 #WorldNav{
-
+    height: 5000px;
+    width: 5000px;
 }
 
 /* This will hold the general CSS properties to each image world */
