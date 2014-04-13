@@ -22,12 +22,12 @@
 	var priorityPoints;
 	var priority; //how high priority the photo is
 	var size; //how big the photo will be displayed
-	var ratio; //conversion from priority to size
+	var ratio; //conversion from priority to potential size tester
 	var SCREENSIZE; //phone screen size
 	var pic = new Image;
 	var screenRepresentationalSize; //how big the screen represents geographically*/
-	var MINTHRESH = 10; //minimum size a photo can be
-	var MAXTHRESH = 300; //maximum size a photo can be
+	var MINTHRESH = SCREENSIZE/30; //minimum size a photo can be
+	var MAXTHRESH = SCREENSIZE/6; //maximum size a photo can be
 	
 	function Photo (aLongitude, aLatitude)
 	{
@@ -69,7 +69,7 @@
 	
 	function updateRatio()
 	{
-		ratio = SCREENSIZE/screenRepresentationalSize;
+        
 	}
 	
 	function updateRatioMultiplier() //multiply this return with ratio for size
@@ -97,7 +97,6 @@
 
     function updateSize()
     {
-<<<<<<< HEAD
         var x = updateRatioMultiplier();
         var xString = x.toString();
         var px = "px";
@@ -105,14 +104,8 @@
         var xstring1=quote.concat(xString);
         var xpixelage = xstring1.concat(px);
         var finalx=xpixelage.concat(quote);
-        document.getElementById("photo").style.width = finalx;
-        document.getElementById("photo").style.height = '200px';
-=======
-        document.getElementById("photo").style.width='100px';
-        //pic.width *=2;
-        //pic.setWidth(pic.width()*2);
-        //pic.setHeight(pic.height()*2);
->>>>>>> 2992ade83c03f09390c522f790b9b35231890246
+        alert(finalx);
+        document.getElementById("photo").style.width=finalx;
     }
 </script>
 </html>
