@@ -28,6 +28,11 @@ $JSONResult = array();
 
 $ImagesJSONResult = array();
 
+$JSONResult['MaxLat'] = -9999;
+$JSONResult['MinLat'] = 9999;
+$JSONResult['MaxLong'] = -9999;
+$JSONResult['MinLong'] = 9999;
+
 $maxPriority = -9001;
 
 foreach($ImageResults as $ImageResult){
@@ -59,9 +64,24 @@ foreach($ImageResults as $ImageResult){
     */
 
     $CurrentImage['Priority'] = $ImageResult['Priority'];
-    $CurrentImage['UploadTime'] = strtotime($ImageResult['2014-04-12 12:35:41']);
+    $CurrentImage['UploadTime'] = strtotime($ImageResult['UploadTime']);
     $CurrentImage['Latitude'] = $ImageResult['Latitude'];
     $CurrentImage['Longitude'] = $ImageResult['Longitude'];
+
+    if($CurrentImage['Latitude']>$JSONResult['MaxLat']){
+        $JSONResult['MaxLat'] = $CurrentImage['Latitude'];
+    }
+    if($CurrentImage['Latitude']<$JSONResult['MinLat']){
+        $JSONResult['MinLat'] = $CurrentImage['Latitude'];
+    }
+
+    if($CurrentImage['Longitude']>$JSONResult['MaxLong']){
+        $JSONResult['MaxLong'] = $CurrentImage['Longitude'];
+    }
+    if($CurrentImage['Longitude']<$JSONResult['MinLong']){
+        $JSONResult['MinLong'] = $CurrentImage['Longitude'];
+    }
+
 
     //Get the highest priority score for the image set
     if($CurrentImage['Priority']>$maxPriority){

@@ -21,5 +21,11 @@ body{
 
 /* This will hold the general CSS properties to each image world */
 .WorldImage{
-    position: absolute;
+
+}
+
+.masonryGrid{
+    height: 5000px;
+    width: 5000px;
+    position:relative;
 }
