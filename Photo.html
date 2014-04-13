@@ -1,43 +1,58 @@
 <!DOCTYPE html>
 <html>
     
-<img border="0" src="/images/pulpit.jpg" alt="Pulpit rock" width="304" height="228">
-    
+    <p id="myPar">I am a paragraph.</p>
+    <p>
+    <button type="button" onclick="Photo(1, 1)">Try it</button>
+    </p>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script>
 	var longitude; //double
 	var latitude; //double
-	var timeOfBirth; //double
+	var timeOfBirth = new Date(); //double
+    var currentTime = new Date();
 	var age; //double
 	var priorityPoints;
 	var priority; //how high priority the photo is
 	var size; //how big the photo will be displayed
 	var ratio; //conversion from priority to size
 	var SCREENSIZE; //phone screen size
-	var pic;
-	double screenRepresentationalSize; //how big the screen represents geographically
+	var pic = new Image;
+	/*double screenRepresentationalSize; //how big the screen represents geographically
 	double final MINTHRESH; //minimum size a photo can be
-	double final MAXTHRESH; //maximum size a photo can be	
+	double final MAXTHRESH; //maximum size a photo can be*/
 	
 	function Photo (aLongitude, aLatitude)
 	{
-		longitude = aLongitude;
+        alert("hi");
+        longitude = aLongitude;
 		latitude = aLatitude;
-		timeOfBirth = getTime();
+		timeOfBirth.getTime();
 		priorityPoints = 0.0;
 		updatePriority();
-		pic = document.images;
-		SCREENSIZE = Math.sqrt(pow(screen.availHeight(),2) + pow(screen.availWidth(),2));
-		size = pic.width() > pic.length() ? pic.width():pic.length();
+		pic.src = "/Users/ericcheng/Pictures/Yosemite-Tahoe/Yosemite Bryan/2013-06-17 20.21.12 HDR.jpg";
+        $('<img />').load(function(){
+                          $("body").append($(this))
+                          .attr('src', "/Users/ericcheng/Pictures/Yosemite-Tahoe/Yosemite Bryan/2013-06-17 20.21.12 HDR.jpg")
+                          });
+                          
+        SCREENSIZE = Math.sqrt(Math.pow(screen.availHeight,2) + Math.pow(screen.availWidth,2));
+		size = pic.width > pic.length ? pic.width:pic.length;
+       var myImage = document.getElementById('yosemite');
+       if(myImage && myImage.style){
+           myImage.style.width='400px';
+           myImage.style.width='400px';
+       }
 	}
 	
 	function updateAge()
 	{
-		age = getTime() - timeOfBirth;
+		age = currentTime.getTime() - timeOfBirth;
 	}
 	
 	function updatePriority()
 	{
-		priorityPoints += (pic.width()*pic.length())/(screen.availHeight()*screen.availWidth());
+		priorityPoints += (pic.width*pic.length)/(screen.availHeight*screen.availWidth);
 		updateAge();
 		priority = (1 - age/86400000)*priorityPoints;
 	}
@@ -65,5 +80,14 @@
 		}
 		updatePriority();
 	}
+
+    function doubleSize()
+    {
+        Photo(1,1);
+        //document.getElementById("myPar").innerHTML=pic.width;
+        //pic.width *=2;
+        //pic.setWidth(pic.width()*2);
+        //pic.setHeight(pic.height()*2);
+    }
 </script>
 </html>
